@@ -4,29 +4,22 @@ import Table from "./Table";
 import { useEffect, useState } from "react";
 
 const App = () => {
-
   const [users, setUsers] = useState([]);
   const [isEdite, setIsEdite] = useState(false);
   const [user, setUser] = useState({});
-  
-  
   useEffect(() => {
     getUsers();
   }, []);
-
- //gets all users //
   const getUsers = () => {
-    axios.get("http://localhost:5000/api/users")
+    axios.get("http://192.168.1.50:5000/api/users")
       .then(response => {
         setUsers(response.data || []);
       })
       .catch(err => console.log(err));
   };
-
-  //add users //
   const addUser = (user) => {
     if (user.id !== 0 && user.name !="") {
-      axios.post("http://localhost:5000/api/adduser", user)
+      axios.post("http://192.168.1.50:5000/api/adduser", user)
         .then(() => {
           getUsers();
           // alert(`User ${user.name} added successfully`);
@@ -35,12 +28,10 @@ const App = () => {
     }else{
       alert("User id and name is required");};
   };
-
-  //update user //
   const updateUser = (data) => {
     setIsEdite(true);
-    if (data.id !== 0 && data.name !="") {
-      axios.put('http://localhost:5000/api/updateuser', data)
+    if (data.id !== 0 && data.name != "") {
+      axios.put('http://192.168.1.50:5000/api/updateuser', data)
         .then(() => {
           setIsEdite(false);
           getUsers();        
@@ -51,12 +42,11 @@ const App = () => {
       setIsEdite(false);
     }
   };
-
   const deleteUser = (id) => {
     if (id !== 0 ) {
       const deleteConfirmation = window.confirm("Are you sure you want to delete this user?");
       if (deleteConfirmation) {
-        axios.delete('http://localhost:5000/api/deleteuser', {
+        axios.delete('http://192.168.1.50:5000/api/deleteuser', {
           data: {id}
         })
         .then(() => {
@@ -78,7 +68,7 @@ const App = () => {
        updateUser={updateUser}
      />
       <Table
-        getUser={(user) => setUser(user)} 
+        getUser={ user => setUser(user) }
         users={users}
         setIsEdite={setIsEdite}
         deleteUser={deleteUser}
@@ -86,5 +76,4 @@ const App = () => {
     </div>
   )
 }
-
 export default App;
